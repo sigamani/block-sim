@@ -8,7 +8,7 @@ PREDICTOR_TIMEOUT_IN_SECONDS=1000
 BATCH_SIZE_THRESHOLD_FOR_TIME_ESTIMATION="0"
 BRANCH_NAME="main"
 USE_PROCESS_FOR_FRONTEND=true
-UPDATE_VIDUR_CODE=true
+UPDATE_BLOCK_CODE=false
 UPDATE_VLLM_CODE=false
 RUN_EXP=true
 RESTART_VLLM=true
@@ -30,9 +30,6 @@ AVAILABLE_INSTANCE="12"
 ENABLE_PREEMPTIVE_AUTO_PROVISIONING="false"
 # 0 means no SLO
 MAX_SLO="0"
-
-HUGGINGFACE_TOKEN=""
-TARGET_HOST=""
 
 for model in $MODEL; do
   if [ "$model" = "meta-llama/Llama-2-7b-hf" ]; then
@@ -61,9 +58,9 @@ for model in $MODEL; do
                 fi
                 for chunk in $CHUNK_SIZE; do
                   for qps in $QPS; do
-                    dataset_path="~/vidur_opt_scheduler/data/trace_data/$dataset_name/generate/$MODEL_TYPE"
+                    dataset_path="~/Block/data/trace_data/$dataset_name/generate/$MODEL_TYPE"
                     echo "Running experiment with scheduler: $scheduler, model: $model, dataset: $dataset_name, qps: $qps, enable_chunked_prefill: $enable_chunked_prefill batch_size: $batch_cap, chunk_size $chunk"
-                    sh block/exp/experiment.sh $scheduler $NUM_REQUEST $RESTART_VLLM  $batch_cap $dataset_name $dataset_path $dataset_name true $KEEP_ALL_METRICS $START_INDEX $model $MODEL_TYPE $MAX_MODEL_LENGTH $TARGET_HOST $enable_chunked_prefill $PREDICTOR_WORKERS $GLOBAL_SCHEDULER_WORKERS $BACKEND_WORKERS $chunk $qps $BRANCH_NAME $batch_size_cut $n_selected $PROFILING_SAMPLE_RATE $TIMEOUT_IN_SECONDS $USE_FOR_PROFILING_ONLY $PREDICTOR_TIMEOUT_IN_SECONDS $USE_PROCESS_FOR_FRONTEND $UPDATE_VIDUR_CODE $UPDATE_VLLM_CODE $RUN_EXP $use_estimation_len $OUTPUT_DIR_PREFIX $AVAILABLE_INSTANCE $MAX_SLO $ENABLE_PREEMPTIVE_AUTO_PROVISIONING $HUGGINGFACE_TOKEN
+                    sh block/exp/experiment.sh $scheduler $NUM_REQUEST $RESTART_VLLM  $batch_cap $dataset_name $dataset_path $dataset_name true $KEEP_ALL_METRICS $START_INDEX $model $MODEL_TYPE $MAX_MODEL_LENGTH $enable_chunked_prefill $PREDICTOR_WORKERS $GLOBAL_SCHEDULER_WORKERS $BACKEND_WORKERS $chunk $qps $BRANCH_NAME $batch_size_cut $n_selected $PROFILING_SAMPLE_RATE $TIMEOUT_IN_SECONDS $USE_FOR_PROFILING_ONLY $PREDICTOR_TIMEOUT_IN_SECONDS $USE_PROCESS_FOR_FRONTEND $UPDATE_BLOCK_CODE $UPDATE_VLLM_CODE $RUN_EXP $use_estimation_len $OUTPUT_DIR_PREFIX $AVAILABLE_INSTANCE $MAX_SLO $ENABLE_PREEMPTIVE_AUTO_PROVISIONING
                   done
                 done
               done
@@ -74,6 +71,3 @@ for model in $MODEL; do
     done
   done
 done
-
-#mkdir -p ~/vidur_opt_scheduler/single_node_experiment_output/
-#scp -r $TARGET_HOST:~/vidur_opt_scheduler/experiment_output/* ~/vidur_opt_scheduler/single_node_experiment_output/.

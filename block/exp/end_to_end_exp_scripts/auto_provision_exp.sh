@@ -10,7 +10,7 @@ PREDICTOR_TIMEOUT_IN_SECONDS=1000
 BATCH_SIZE_THRESHOLD_FOR_TIME_ESTIMATION="0"
 BRANCH_NAME="main"
 USE_PROCESS_FOR_FRONTEND=true
-UPDATE_VIDUR_CODE=true
+UPDATE_BLOCK_CODE=false
 UPDATE_VLLM_CODE=false
 RUN_EXP=true
 RESTART_VLLM=true
@@ -25,14 +25,11 @@ PROFILING_SAMPLE_RATE=0.000
 USE_FOR_PROFILING_ONLY=false
 NUM_REQUEST=10000
 KEEP_ALL_METRICS=false
-N_SELECTED="11"
+N_SELECTED="10"
 OUTPUT_DIR_PREFIX="auto_provision"
 
 # Config for auto provisioning
 MAX_SLO="0 70"
-
-HUGGINGFACE_TOKEN=""
-TARGET_HOST=""
 
 
 for model in $MODEL; do
@@ -61,10 +58,10 @@ for model in $MODEL; do
                     AVAILABLE_INSTANCE="6"
                     ENABLE_PREEMPTIVE_AUTO_PROVISIONING="false true"
                   fi
-                  dataset_path="~/vidur_opt_scheduler/data/trace_data/$dataset_name/generate/$MODEL_TYPE"
+                  dataset_path="~/Block/data/trace_data/$dataset_name/generate/$MODEL_TYPE"
                   for enable_preemptive_auto_provisioning in $ENABLE_PREEMPTIVE_AUTO_PROVISIONING; do
                     echo "Running experiment with scheduler: $scheduler, model: $model, dataset: $dataset_name, qps: $qps, batch_size_cut: $batch_size_cut enable_chunked_prefill: $enable_chunked_prefill use_for_profiling_only: $USE_FOR_PROFILING_ONLY predictor timeout: $PREDICTOR_TIMEOUT_IN_SECONDS enable preemptive auto provisioning: $enable_preemptive_auto_provisioning"
-                    sh block/exp/experiment.sh $scheduler $NUM_REQUEST $RESTART_VLLM  $BATCH_CAP $dataset_name $dataset_path $dataset_name true $KEEP_ALL_METRICS $START_INDEX $model $MODEL_TYPE $MAX_MODEL_LENGTH $TARGET_HOST $enable_chunked_prefill $PREDICTOR_WORKERS $GLOBAL_SCHEDULER_WORKERS $BACKEND_WORKERS $CHUNK_SIZE $qps $BRANCH_NAME $batch_size_cut $n_selected $PROFILING_SAMPLE_RATE $TIMEOUT_IN_SECONDS $USE_FOR_PROFILING_ONLY $PREDICTOR_TIMEOUT_IN_SECONDS $USE_PROCESS_FOR_FRONTEND $UPDATE_VIDUR_CODE $UPDATE_VLLM_CODE $RUN_EXP $use_estimation_len $OUTPUT_DIR_PREFIX $AVAILABLE_INSTANCE $max_slo $enable_preemptive_auto_provisioning $HUGGINGFACE_TOKEN
+                    sh block/exp/experiment.sh $scheduler $NUM_REQUEST $RESTART_VLLM  $BATCH_CAP $dataset_name $dataset_path $dataset_name true $KEEP_ALL_METRICS $START_INDEX $model $MODEL_TYPE $MAX_MODEL_LENGTH $enable_chunked_prefill $PREDICTOR_WORKERS $GLOBAL_SCHEDULER_WORKERS $BACKEND_WORKERS $CHUNK_SIZE $qps $BRANCH_NAME $batch_size_cut $n_selected $PROFILING_SAMPLE_RATE $TIMEOUT_IN_SECONDS $USE_FOR_PROFILING_ONLY $PREDICTOR_TIMEOUT_IN_SECONDS $USE_PROCESS_FOR_FRONTEND $UPDATE_BLOCK_CODE $UPDATE_VLLM_CODE $RUN_EXP $use_estimation_len $OUTPUT_DIR_PREFIX $AVAILABLE_INSTANCE $max_slo $enable_preemptive_auto_provisioning
                   done
                 done
               done
@@ -75,6 +72,3 @@ for model in $MODEL; do
     done
   done
 done
-
-#mkdir -p ~/vidur_opt_scheduler/single_node_experiment_output/
-#scp -r $TARGET_HOST:~/vidur_opt_scheduler/experiment_output/* ~/vidur_opt_scheduler/single_node_experiment_output/.

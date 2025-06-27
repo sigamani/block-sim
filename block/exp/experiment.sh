@@ -1,3 +1,6 @@
+# This script is used to run benchmark and global scheduler with the Block framework.
+TARGET_HOST=""
+
 SCHEDULER_METRIC_TYPE=$1
 ENABLE_TIME_ESTIMATION=true
 
@@ -15,37 +18,35 @@ START_INDEX=${10}
 MODEL=${11}
 MODEL_TYPE=${12}
 MAX_MODEL_LENGTH=${13}
-TARGET_HOST=${14}
 HOST_CONFIG_PATH='block/config/host_configs.json'
 PREDICTOR_CONFIG_PATH="block/config/${MODEL_TYPE}_config.json"
-ENABLE_CHUNKED_PREFILL=${15}
+ENABLE_CHUNKED_PREFILL=${14}
 
-PREDICTOR_WORKERS=${16}
-GLOBAL_SCHEDULER_WORKERS=${17}
-BACKEND_WORKERS=${18}
-CHUNK_SIZE=${19}
-QPS=${20}
-BRANCH_NAME=${21}
-BATCH_SIZE_THRESHOLD_FOR_TIME_ESTIMATION=${22}
-N_SELECTED=${23}
-PROFILING_SAMPLE_RATE=${24}
-TIMEOUT_IN_SECONDS=${25}
-USE_FOR_PROFILING_ONLY=${26}
-PREDICTOR_TIMEOUT_IN_SECONDS=${27}
-USE_PROCESS_FOR_FRONTEND=${28}
+PREDICTOR_WORKERS=${15}
+GLOBAL_SCHEDULER_WORKERS=${16}
+BACKEND_WORKERS=${17}
+CHUNK_SIZE=${18}
+QPS=${19}
+BRANCH_NAME=${20}
+BATCH_SIZE_THRESHOLD_FOR_TIME_ESTIMATION=${21}
+N_SELECTED=${22}
+PROFILING_SAMPLE_RATE=${23}
+TIMEOUT_IN_SECONDS=${24}
+USE_FOR_PROFILING_ONLY=${25}
+PREDICTOR_TIMEOUT_IN_SECONDS=${26}
+USE_PROCESS_FOR_FRONTEND=${27}
 
-UPDATE_VIDUR_CODE=${29}
-UPDATE_VLLM_CODE=${30}
-RUN_EXP=${31}
-USE_ESTIMATION_LEN=${32}
-OUTPUT_DIR_PREFIX=${33}
+UPDATE_BLOCK_CODE=${28}
+UPDATE_VLLM_CODE=${29}
+RUN_EXP=${30}
+USE_ESTIMATION_LEN=${31}
+OUTPUT_DIR_PREFIX=${32}
 
 # Setting for auto provisioning
-AVAILABLE_INSTANCE=${34}
-MAX_SLO=${35}
-ENABLE_PREEMPTIVE_AUTO_PROVISIONING=${36}
+AVAILABLE_INSTANCE=${33}
+MAX_SLO=${34}
+ENABLE_PREEMPTIVE_AUTO_PROVISIONING=${35}
 
-HUGGINGFACE_TOKEN=${37}
 
 if [ "$ENABLE_CHUNKED_PREFILL" = "true" ]; then
   MAX_NUM_BATCHED_TOKEN=$CHUNK_SIZE
@@ -69,11 +70,11 @@ esac
 #mkdir -p experiment_output/logs
 
 if [ "$RESTART_VLLM" = "true" ]; then
-  parallel-ssh --host $TARGET_HOST "cd block && rm experiment_output/logs/*"
+  parallel-ssh --host $TARGET_HOST "cd Block && rm experiment_output/logs/*"
   sh block/exp/reset.sh
-  if [ "$UPDATE_VIDUR_CODE" = "true" ]; then
-    parallel-ssh -t 0 -h block/config/hosts "cd block && git checkout $BRANCH_NAME"
-    parallel-ssh -t 0 -h block/config/hosts "cd block && git add -u . && git stash && git reset --hard HEAD~20 && git pull"
+  if [ "$UPDATE_BLOCK_CODE" = "true" ]; then
+    parallel-ssh -t 0 -h block/config/hosts "cd Block && git checkout $BRANCH_NAME"
+    parallel-ssh -t 0 -h block/config/hosts "cd Block && git add -u . && git stash && git reset --hard HEAD~1 && git pull"
   fi
   sleep 60
   nohup sh block/exp/run_exp_vllm.sh $BATCH_CAP $MODEL $UPDATE_VLLM_CODE $VLLM_VERSION $MAX_MODEL_LENGTH $ENABLE_CHUNKED_PREFILL $BACKEND_WORKERS $MAX_NUM_BATCHED_TOKEN > /dev/null 2>&1 &
@@ -122,14 +123,14 @@ if [ "$RUN_EXP" = "true" ]; then
                   OUTPUT_DIR="${OUTPUT_DIR_PREFIX}/${DATASET_TYPE}/${metric_type}/qps_${qps}_num_queries_${num_queries}_n_${n}_chunked_${ENABLE_CHUNKED_PREFILL}_predictor_${PREDICTOR_WORKERS}_global_${GLOBAL_SCHEDULER_WORKERS}_len_estimated_${use_estimation_len}_max_slo_${MAX_SLO}_enable_preemptive_auto_provisioning_${ENABLE_PREEMPTIVE_AUTO_PROVISIONING}_batch_${BATCH_CAP}_chunk_${CHUNK_SIZE}"
                   sleep 10
                   if [ "$use_estimation_len" = "true" ]; then
-                    parallel-ssh -i -t 0 --host $TARGET_HOST "cd block && export PYTHONPATH=. && export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib:/usr/local/lib/python3.10/dist-packages/nvidia/nccl/lib:/usr/local/lib/python3.10/dist-packages/cusparselt/lib && python block/benchmark/benchmark_serving.py --ip_ports 127.0.0.1:8200 --tokenizer $MODEL --num_sampled_requests $num_queries --dataset_type $DATASET_TYPE --dataset_path $DATASET_PATH --qps $qps --backend block --log_filename $LOG_FILENAME --output_dir $OUTPUT_DIR  --data_start_index $START_INDEX --trust_remote_code --max_request_len $MAX_MODEL_LENGTH --timeout_in_seconds $TIMEOUT_IN_SECONDS --use_estimated_response_lens"
+                    parallel-ssh -i -t 0 --host $TARGET_HOST "cd Block && export PYTHONPATH=. && export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib:/usr/local/lib/python3.10/dist-packages/nvidia/nccl/lib:/usr/local/lib/python3.10/dist-packages/cusparselt/lib && python block/benchmark/benchmark_serving.py --ip_ports 127.0.0.1:8200 --tokenizer $MODEL --num_sampled_requests $num_queries --dataset_type $DATASET_TYPE --dataset_path $DATASET_PATH --qps $qps --backend block --log_filename $LOG_FILENAME --output_dir $OUTPUT_DIR  --data_start_index $START_INDEX --trust_remote_code --max_request_len $MAX_MODEL_LENGTH --timeout_in_seconds $TIMEOUT_IN_SECONDS --use_estimated_response_lens"
                   else
-                    parallel-ssh -i -t 0 --host $TARGET_HOST "cd block && export PYTHONPATH=. && export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib:/usr/local/lib/python3.10/dist-packages/nvidia/nccl/lib:/usr/local/lib/python3.10/dist-packages/cusparselt/lib && python block/benchmark/benchmark_serving.py --ip_ports 127.0.0.1:8200 --tokenizer $MODEL --num_sampled_requests $num_queries --dataset_type $DATASET_TYPE --dataset_path $DATASET_PATH --qps $qps --backend block --log_filename $LOG_FILENAME --output_dir $OUTPUT_DIR  --data_start_index $START_INDEX --trust_remote_code --max_request_len $MAX_MODEL_LENGTH --timeout_in_seconds $TIMEOUT_IN_SECONDS"
+                    parallel-ssh -i -t 0 --host $TARGET_HOST "cd Block && export PYTHONPATH=. && export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib:/usr/local/lib/python3.10/dist-packages/nvidia/nccl/lib:/usr/local/lib/python3.10/dist-packages/cusparselt/lib && python block/benchmark/benchmark_serving.py --ip_ports 127.0.0.1:8200 --tokenizer $MODEL --num_sampled_requests $num_queries --dataset_type $DATASET_TYPE --dataset_path $DATASET_PATH --qps $qps --backend block --log_filename $LOG_FILENAME --output_dir $OUTPUT_DIR  --data_start_index $START_INDEX --trust_remote_code --max_request_len $MAX_MODEL_LENGTH --timeout_in_seconds $TIMEOUT_IN_SECONDS"
                   fi
 
                   sleep 10
-                  parallel-ssh --host $TARGET_HOST "cd block && mkdir experiment_output/$OUTPUT_DIR/running_logs"
-                  parallel-ssh --host $TARGET_HOST "cd block && mv experiment_output/logs/* experiment_output/$OUTPUT_DIR/running_logs/."
+                  parallel-ssh --host $TARGET_HOST "cd Block && mkdir experiment_output/$OUTPUT_DIR/running_logs"
+                  parallel-ssh --host $TARGET_HOST "cd Block && mv experiment_output/logs/* experiment_output/$OUTPUT_DIR/running_logs/."
                   done
               done
           done

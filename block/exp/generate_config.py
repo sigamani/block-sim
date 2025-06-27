@@ -4,8 +4,8 @@ import xml.etree.ElementTree as ET
 from collections import OrderedDict
 import json
 
-manifest_path = "block/prediction/cl_manifest.xml"
-config_output_path = "block/prediction/config"
+manifest_path = "block/cl_manifest.xml"
+config_output_path = "block/config"
 user_name = ""
 
 

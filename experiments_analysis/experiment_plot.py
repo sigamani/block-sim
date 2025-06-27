@@ -168,7 +168,7 @@ def plot_linear_with_different_qps(ax,
     if slo > 0 and len(capacity_indexes) > 0:
         if zoom_out:
             axins = inset_axes(ax, width="60%", height="40%", loc='upper left')
-        selected_schedulers = ["Lumnix-", "Block", "Block*"]
+        selected_schedulers = ["Llumnix-", "Block", "Block*"]
         max_intersection = max([capacity_x for scheduler, capacity_x in capacity_indexes
                                 if scheduler in selected_schedulers], default=0)
         min_intersection = min([capacity_x for scheduler, capacity_x in capacity_indexes
@@ -182,8 +182,8 @@ def plot_linear_with_different_qps(ax,
                 axins.plot(x_values, y_values, label=scheduler, color=scheduler_to_color[scheduler])
 
         if zoom_out:
-            axins.set_xlim(math.floor(min_intersection) - 0.1,
-                           math.ceil(max_intersection) + 0.1)  # Adjust limits as needed
+            axins.set_xlim(min_intersection - 0.5,
+                           max_intersection + 0.3)  # Adjust limits as needed
             axins.set_ylim(ttft_slo - 2, ttft_slo + 2)  # Adjust limits as needed
             axins.plot([math.floor(min_intersection) - 0.2, math.ceil(max_intersection) + 0.5], [slo, slo],
                        linewidth=1.1,
@@ -528,7 +528,7 @@ def main():
     parser.add_argument("--num-of-cdf-figures", type=int, default=5)
     parser.add_argument("--zoom-for-slo", action='store_true')
     parser.add_argument("--plot-selected-scheduler-only", action='store_true')
-    parser.add_argument("--selected-schedulers", type=str, default="Block, Lumnix-, Block*")
+    parser.add_argument("--selected-schedulers", type=str, default="Block, Llumnix-, Block*")
     parser.add_argument("--zoom-for-cdf", action='store_true')
     parser.add_argument("--cdf-zoomed-min-qps", type=int, default=36)
     parser.add_argument("--show-slo-text", action='store_true')

@@ -170,10 +170,10 @@ Plase checking requirments.txt and `block/exp/setup.sh`
 If you find Block useful, please cite our arXiv pre-print:
 
 ```
-@misc{block2024,
+@misc{block2025,
   title   = {Block: Balance Loader of Language-Model Instances with Context and Knowledge},
   author  = {Anonymous},
-  year    = {2024},
+  year    = {2025},
   url     = {https://anonymous.4open.science/...},
 }
 ```

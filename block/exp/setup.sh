@@ -1,5 +1,5 @@
-BLOCK_GITHUB_LINK=""
-VLLM_GITHUB_LINK=""
+BLOCK_GITHUB_LINK="https://github.com/AKafakA/Block.git"
+VLLM_GITHUB_LINK="https://github.com/AKafakA/vllm.git"
 
 parallel-ssh -t 0 -h block/config/hosts "sudo apt update && sudo apt full-upgrade -y"
 parallel-ssh -t 0 -h block/config/hosts "sudo apt install -y python3-pip python3-venv ccache"

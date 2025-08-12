@@ -26,7 +26,7 @@ Everything needed to reproduce the paper’s results—source code, datasets, ex
 • **Query Length Tagger** (`block/length_estimation`)
  A RoBERTa-based regressor that predicts the response-token count for unseen (model, prompt) pairs, feeding the scheduler with input-aware cost estimates. Currently, we just run this model offline to tag the ShareGPT dataset with predicted response length in `data/trace_data/sharegpt/generate` but it should be easy to adapt to any runtime model service as tf-serving or TorchServe.
 
-Block is inference-engine agnostic. We provide an implementation for vLLM 0.7.2 (see the sealed repo at https://anonymous.4open.science/r/vllm-644A).
+Block is inference-engine agnostic. We provide an implementation for vLLM 0.7.2 (see the sealed repo at https://github.com/AKafakA/vllm).
 
 ---
 
@@ -169,9 +169,14 @@ Plase checking requirments.txt and `block/exp/setup.sh`
 If you find Block useful, please cite our paper:
 
 ```
-@misc{blockbalancingloadllm,
+@misc{da2025blockbalancingloadllm,
       title={Block: Balancing Load in LLM Serving with Context, Knowledge and Predictive Scheduling}, 
+      author={Wei Da and Evangelia Kalyvianaki},
       year={2025},
+      eprint={2508.03611},
+      archivePrefix={arXiv},
+      primaryClass={cs.DC},
+      url={https://arxiv.org/abs/2508.03611}, 
 }
 ```
 

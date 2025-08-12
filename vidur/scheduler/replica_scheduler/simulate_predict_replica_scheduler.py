@@ -79,7 +79,7 @@ class SimulatePredictReplicaScheduler:
         for stage_id in self._replica_scheduler.replica_stage_schedulers.keys():
             execution_time = self.__get_execution_time(batch, stage_id)
             # if the stage is busy, wait for the current batch to complete.
-            # TODO(wda): not sure if this will introduce a duplicated time so keep it as comments but be rechecked later
+            # TODO: not sure if this will introduce a duplicated time so keep it as comments but be rechecked later
             # if replica_stage_scheduler.is_busy:
             #     replica_stage_scheduler = self._replica_scheduler.get_replica_stage_scheduler(stage_id)
             #     execution_time += replica_stage_scheduler.current_execution_time

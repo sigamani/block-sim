@@ -1,6 +1,6 @@
 # Block
 
-**Block: Balance Loader of LLM Serving with Context ,Knowledge and Predictive Scheduling**
+**Block: Balance Loader of LLM Serving with Context ,Knowledge and Predictive Scheduling** ([paper link](https://arxiv.org/abs/2508.03611))
 
 Block is a research prototype that explores *predictive, performance-aware scheduling* for distributed large-language-model (LLM) inference.
 It builds on top of Microsoft’s [Vidur](https://github.com/microsoft/vidur) simulator, which initially developed for offline evaluation and optimal configuration searching and adds

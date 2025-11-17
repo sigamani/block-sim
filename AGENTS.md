@@ -1,0 +1,19 @@
+- Python 3.10+; install deps via `pip install -r requirements.txt` and `pip install -r requirements-dev.txt`.
+- Key scripts: `sh block/exp/setup.sh`, `python block/exp/generate_config.py ...`.
+- Full lint: `black .` then `isort . --profile black`.
+- Static analysis: `flake8 block vidur`, `pylint block vidur`.
+- Run all unittests: `python -m unittest discover -s tests -p "test_*.py"`.
+- Single unittest: `python -m unittest tests.test_module.TestClass.test_method`.
+- Pytest (if present): `pytest -q`; single test `pytest path/to/test.py::TestClass::test_case`.
+- Formatting: Black defaults (line length 88), prefer trailing commas, UTF-8 files.
+- Imports: absolute only; stdlib/third-party/local groups separated by one blank line; no wildcards.
+- Types: annotate public APIs; favor precise typing; use `dataclasses` where natural.
+- Naming: modules, functions, variables in snake_case; classes PascalCase; constants UPPER_SNAKE_CASE.
+- Error handling: raise specific exceptions; avoid bare `except`; never swallow errors; library code logs with `logging`.
+- CLI/scripts: make deterministic, parameterize via flags, guard with `if __name__ == "__main__"`.
+- Data handling: treat `data/` as read-only; write outputs under `experiment_output/`.
+- Performance: avoid O(n^2) hotspots; batch I/O; leverage vectorized numpy/pandas patterns.
+- Repo layout: core logic in `block/` and `vidur/`; experiments under `block/exp/`.
+- Testing additions: mirror package structure under `tests/`; prefer unittest style, pytest optional.
+- Docs: update `readme.md` when changing scripts or entry points; keep public docstrings current.
+- Cursor/Copilot: no repo-specific rules found; follow any user-level `.clauderc.yaml` guidance if applicable.

@@ -16,4 +16,5 @@
 - Repo layout: core logic in `block/` and `vidur/`; experiments under `block/exp/`.
 - Testing additions: mirror package structure under `tests/`; prefer unittest style, pytest optional.
 - Docs: update `readme.md` when changing scripts or entry points; keep public docstrings current.
+- vLLM Testing: For model serving tests, use Docker with `michaelsigamani/block:v1` and run `python3 -m vllm.entrypoints.api_server --model microsoft/phi-2 --port 8000 --trust-remote-code`.
 - Cursor/Copilot: no repo-specific rules found; follow any user-level `.clauderc.yaml` guidance if applicable.

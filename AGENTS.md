@@ -18,3 +18,4 @@
 - Docs: update `readme.md` when changing scripts or entry points; keep public docstrings current.
 - vLLM Testing: For model serving tests, use Docker with `michaelsigamani/block:v1` and run `python3 -m vllm.entrypoints.api_server --model microsoft/phi-2 --port 8000 --trust-remote-code`.
 - Cursor/Copilot: no repo-specific rules found; follow any user-level `.clauderc.yaml` guidance if applicable.
+- GPU Focus: GPU utilization is the primary objective of this repository; performance testing, profiling, and simulations should prioritize GPU-enabled environments and hardware-aware reporting. If a CPU fallback is needed, explicitly document it and annotate any deviations in results.

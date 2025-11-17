@@ -160,7 +160,9 @@ It was tested with this set of packages
 
 • flashinfer-python 0.2.5 and triton 3.2.0, PyTorch-2.5+, customized vLLM based on 0.7.2
 
-Plase checking requirments.txt and `block/exp/setup.sh`
+Please check requirements.txt and `block/exp/setup.sh`
+
+Note: PyTorch installation may timeout in some environments; consider using a virtual environment or installing manually if issues occur.
 
 ---
 

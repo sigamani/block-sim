@@ -1,4 +1,5 @@
-pyinstrumentpylint
+pyinstrument
+pylint
 black
 autopep8
 isort

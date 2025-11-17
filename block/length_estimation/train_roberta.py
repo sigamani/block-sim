@@ -22,22 +22,22 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--regression-model-name",
                         type=str,
-                        default="roberta-base")
+                        default="distilroberta-base")
     parser.add_argument("--tokenizer",
                         type=str,
-                        default="meta-llama/Llama-2-7b-hf")
+                        default="distilroberta-base")
     parser.add_argument("--train-data-path",
                         type=str,
-                        default="data/sharegpt-llama-7b-train-40k.json")
+                        default="/Users/michaelsigamani/Documents/DevelopmentCode/2025-fall/block-sim/data/length_estimation/sharegpt-qwen-train-40k.json")
     parser.add_argument("--val-data-path",
                         type=str,
-                        default="data/sharegpt-llama-7b-val-10k.json")
+                        default="/Users/michaelsigamani/Documents/DevelopmentCode/2025-fall/block-sim/data/length_estimation/sharegpt-qwen-val-10k.json")
     parser.add_argument("--output-dir",
                         type=str,
-                        default="./model/roberta-length-prediction/llama-2-7b")
-    parser.add_argument("--epochs", type=int, default=300)
+                        default="/Users/michaelsigamani/Documents/DevelopmentCode/2025-fall/block-sim/model/roberta-length-prediction/qwen-2.5-0.5b")
+    parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--batch-size", type=int, default=8)
-    parser.add_argument("--num-eval-examples", type=int, default=1000)
+    parser.add_argument("--num-eval-examples", type=int, default=100)
     parser.add_argument("--max-seq-length", type=int, default=512)
     args = parser.parse_args()
     return args
@@ -115,7 +115,7 @@ if __name__ == "__main__":
         per_device_train_batch_size=args.batch_size,
         per_device_eval_batch_size=args.batch_size,
         gradient_accumulation_steps=1,
-        evaluation_strategy="no",
+        eval_strategy="no",
         save_strategy="no",
         logging_steps=10,
         learning_rate=1e-5,
